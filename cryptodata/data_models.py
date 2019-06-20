@@ -1,5 +1,5 @@
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, BIGINT
 from sqlalchemy.orm import relationship
 
 from cryptodata import db_connection
@@ -11,7 +11,7 @@ class TelegramUser(Base):
     __tablename__ = 'telegram_user'
 
     id = Column(Integer, primary_key=True)
-    telegram_id = Column(Integer, unique=True)
+    telegram_id = Column(BIGINT, unique=True)
     requests = relationship("PriceRequest", back_populates="user")
 
 
@@ -19,7 +19,7 @@ class TelegramChat(Base):
     __tablename__ = 'telegram_chat'
 
     id = Column(Integer, primary_key=True)
-    telegram_id = Column(Integer, unique=True)
+    telegram_id = Column(BIGINT, unique=True)
     requests = relationship("PriceRequest", back_populates="chat")
 
 
