@@ -79,6 +79,5 @@ def _build_ticker_result(json_response, ticker_result):
 def _api_get_all_tickers(page_number):
     response = requests.get('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&'
                             'per_page=250&page={}&sparkline=false&'
-                            'price_change_percentage=1h%2C24h%2C7d%2C30d%2C1y'.format(page_number))
+                            'price_change_percentage=1h%2C24h%2C7d%2C30d%2C1y'.format(page_number), timeout=30)
     return response
-
