@@ -9,17 +9,18 @@ class InvalidTicker(Exception):
 
 def get_all_tickers(min_volume=0, logger=None):
     tickers = {}
-    for i in range(1, 9):
+    for i in range(1, 13):
         response = _api_get_all_tickers(i)
         json_response = response.json()
         for item in json_response:
             try:
-                volume = float(item['total_volume'])
-                if volume > min_volume:
-                    ticker_result = TickerResult()
-                    _build_ticker_result(item, ticker_result)
-                    if ticker_result.ticker_symbol not in tickers:
-                        tickers[ticker_result.ticker_symbol] = ticker_result
+                if 'total_volume' in item and item['total_volume']:
+                    volume = float(item['total_volume'])
+                    if volume > min_volume:
+                        ticker_result = TickerResult()
+                        _build_ticker_result(item, ticker_result)
+                        if ticker_result.ticker_symbol not in tickers:
+                            tickers[ticker_result.ticker_symbol] = ticker_result
             except KeyError as key_error:
                 key_err_msg = 'The following key was not present in the CoinGecko API response: \'{}\''.format(key_error)
                 if logger is not None:
@@ -77,7 +78,7 @@ def _build_ticker_result(json_response, ticker_result):
 
 
 def _api_get_all_tickers(page_number):
-    response = requests.get('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&'
+    response = requests.get('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=gecko_desc&'
                             'per_page=250&page={}&sparkline=false&'
                             'price_change_percentage=1h%2C24h%2C7d%2C30d%2C1y'.format(page_number), timeout=30)
     return response
